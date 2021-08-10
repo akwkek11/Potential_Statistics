@@ -175,6 +175,10 @@ def main() -> None:
     # 잠재능력 테이블 dict
     set_potential_table: dict = {(1, 1) : get_table.getWeapon(), (1, 2) : get_table.getSubweapon(), (1, 3) : get_table.getEmblem(),
                                  (2, 1) : get_table.getBlackweapon(), (2, 2) : get_table.getBlacksubweapon(), (2, 3) : get_table.getBlackemblem()}
+    
+    # 시뮬레이션 선택
+    set_simulation: dict = {1: simulation}
+    
     while True:
         try:
             print("Select\n"
@@ -221,8 +225,10 @@ def main() -> None:
 
             print("\nType sample size( >= 1 )")
             count: int = int(sys.stdin.readline().strip())
-
-            print(select_option_prob)
+            
+            # 확률 체크 용 print 디버깅
+            # print(select_option_prob)
+            # print(select_option)
             print("\nPrint Log?\n"
                   "---------------------------\n"
                   "0: no, 1: yes")
@@ -246,7 +252,7 @@ def main() -> None:
                 try:
                     print("\nPlease Wait...\n")
                     for i in range(num_process):
-                        p = Process(target = simulation, args=(sample_list, option_count, collision_count, select_option, select_option_prob, iter_start, iter_end, print_log))
+                        p = Process(target = set_simulation[potential_input], args=(sample_list, option_count, collision_count, select_option, select_option_prob, iter_start, iter_end, print_log))
                         p.start()
                         processes.append(p)
                         iter_start = iter_end

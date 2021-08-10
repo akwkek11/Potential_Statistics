@@ -9,10 +9,51 @@
 from typing import List
 
 class table:
-    def __init__(self) -> None:
-        self.first_weight_index: int = 0
-        self.down_weight_index: int = 0
+    def createTable(self, 
+                    first_option: list, second_option: list, third_option: list, 
+                    first_weight: list, second_weight: list, third_weight: list, 
+                    first_prob: list, second_prob: list, third_prob: list, 
+                    first_target: list, second_and_third_target: list, cube: int) -> None:
+        '''
+            큐브 테이블 생성
+        '''
+        second_prob_dict: dict = {0 : 0.1, 1: 0.2, 2: 0.004975}
+        third_prob_dict: dict = {0 : 0.01, 1: 0.05, 2: 0.004975}
+
+        second_prob_constant: float = second_prob_dict[cube]
+        third_prob_constant: float = third_prob_dict[cube]
+        for i in range(len(first_option) - 1):
+            first_prob.append(round(first_weight[i] / sum(first_weight), 6))
         
+        first_weight_index: int = 0
+        down_weight_index: int = 0
+        for i in range(len(second_option) - 1):
+            if i in first_target:
+                second_prob.append(round((1 - second_prob_constant) * second_weight[down_weight_index] / sum(second_weight), 6))
+                down_weight_index += 1
+            if i in second_and_third_target:
+                if i == len(second_prob) - 1:
+                    second_prob[i] += round(second_prob_constant * first_weight[first_weight_index] / sum(first_weight), 6)
+                else:
+                    second_prob.append(round(second_prob_constant * first_weight[first_weight_index] / sum(first_weight), 6))
+                first_weight_index += 1
+
+        first_weight_index = 0
+        down_weight_index = 0
+        for i in range(len(third_option) - 1):
+            if i in first_target:
+                third_prob.append(round((1 - third_prob_constant) * third_weight[down_weight_index] / sum(third_weight), 6))
+                down_weight_index += 1
+            if i in second_and_third_target:
+                if i == len(third_prob) - 1:
+                    third_prob[i] += round(third_prob_constant * first_weight[first_weight_index] / sum(first_weight), 6)
+                else:
+                    third_prob.append(round(third_prob_constant * first_weight[first_weight_index] / sum(first_weight), 6))
+                first_weight_index += 1
+
+        return
+
+    def __init__(self) -> None:
         '''
             공/마 : p_power9, p_power12, m_power9, m_power12
             보공 : boss20, boss30, boss35, boss40
@@ -31,6 +72,8 @@ class table:
         '''
         # 가중치 순서는 공격력, 마력, 보공, 방무 순이므로, 홈페이지는 방무 - 보공 순이니 헷갈리지 말자.
 
+        cube_dict: dict = {'red': 0, 'black': 1, 'additional': 2}
+
         # 무기
         self.weapon_option_first: list = ['p_power12', 'm_power12', 'boss30', 'boss35', 'boss40', 'def35', 'def40', 'etc']
         self.weapon_option_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'boss20', 'boss30', 'boss35', 'boss40', 'def30', 'def35', 'def40', 'etc']
@@ -42,33 +85,10 @@ class table:
         self.weapon_option_prob_second: list = []
         self.weapon_option_prob_third: list = []
 
-        for i in range(len(self.weapon_option_first) - 1):
-            self.weapon_option_prob_first.append(round(self.weapon_option_weight_first[i] / sum(self.weapon_option_weight_first), 6))
-        for i in range(len(self.weapon_option_second) - 1):
-            if i in [2, 3, 4, 5, 8]:
-                self.weapon_option_prob_second.append(round(0.9 * self.weapon_option_weight_second[self.down_weight_index] / sum(self.weapon_option_weight_second), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10]:
-                if i == len(self.weapon_option_prob_second) - 1:
-                    self.weapon_option_prob_second[i] += round(0.1 * self.weapon_option_weight_first[self.first_weight_index] / sum(self.weapon_option_weight_first), 6)
-                else:
-                    self.weapon_option_prob_second.append(round(0.1 * self.weapon_option_weight_first[self.first_weight_index] / sum(self.weapon_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-        for i in range(len(self.weapon_option_third) - 1):
-            if i in [2, 3, 4, 5, 8]:
-                self.weapon_option_prob_third.append(round(0.99 * self.weapon_option_weight_third[self.down_weight_index] / sum(self.weapon_option_weight_third), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10]:
-                if i == len(self.weapon_option_prob_third) - 1:
-                    self.weapon_option_prob_third[i] += round(0.01 * self.weapon_option_weight_first[self.first_weight_index] / sum(self.weapon_option_weight_first), 6)
-                else:
-                    self.weapon_option_prob_third.append(round(0.01 * self.weapon_option_weight_first[self.first_weight_index] / sum(self.weapon_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-
+        self.createTable(self.weapon_option_first, self.weapon_option_second, self.weapon_option_third,
+                         self.weapon_option_weight_first, self.weapon_option_weight_second, self.weapon_option_weight_third,
+                         self.weapon_option_prob_first, self.weapon_option_prob_second, self.weapon_option_prob_third,
+                         [2, 3, 4, 5, 8], [0, 1, 5, 6, 7, 9, 10], cube=cube_dict['red'])
         '''
         weapon_option_prob_first: list = [0.04878, 0.04878, 0.04878, 0.04878, 0.04878, 0.04878, 0.04878]
         weapon_option_prob_second: list = [0.004878, 0.004878, 0.06, 0.06, 0.06, 0.044878, 0.004878, 0.004878, 0.06, 0.004878, 0.004878]
@@ -90,33 +110,10 @@ class table:
         self.subweapon_option_prob_second: list = []
         self.subweapon_option_prob_third: list = []
         
-        for i in range(len(self.subweapon_option_first) - 1):
-            self.subweapon_option_prob_first.append(round(self.subweapon_option_weight_first[i] / sum(self.subweapon_option_weight_first), 6))
-        for i in range(len(self.subweapon_option_second) - 1):
-            if i in [2, 3, 4, 5, 8, 11]:
-                self.subweapon_option_prob_second.append(round(0.9 * self.subweapon_option_weight_second[self.down_weight_index] / sum(self.subweapon_option_weight_second), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10, 11]:
-                if i == len(self.subweapon_option_prob_second) - 1:
-                    self.subweapon_option_prob_second[i] += round(0.1 * self.subweapon_option_weight_first[self.first_weight_index] / sum(self.subweapon_option_weight_first), 6)
-                else:
-                    self.subweapon_option_prob_second.append(round(0.1 * self.subweapon_option_weight_first[self.first_weight_index] / sum(self.subweapon_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-        for i in range(len(self.subweapon_option_third) - 1):
-            if i in [2, 3, 4, 5, 8, 11]:
-                self.subweapon_option_prob_third.append(round(0.99 * self.subweapon_option_weight_third[self.down_weight_index] / sum(self.subweapon_option_weight_third), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10, 11]:
-                if i == len(self.subweapon_option_prob_third) - 1:
-                    self.subweapon_option_prob_third[i] += round(0.01 * self.subweapon_option_weight_first[self.first_weight_index] / sum(self.subweapon_option_weight_first), 6)
-                else:
-                    self.subweapon_option_prob_third.append(round(0.01 * self.subweapon_option_weight_first[self.first_weight_index] / sum(self.subweapon_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-
+        self.createTable(self.subweapon_option_first, self.subweapon_option_second, self.subweapon_option_third,
+                         self.subweapon_option_weight_first, self.subweapon_option_weight_second, self.subweapon_option_weight_third,
+                         self.subweapon_option_prob_first, self.subweapon_option_prob_second, self.subweapon_option_prob_third,
+                         [2, 3, 4, 5, 8, 11], [0, 1, 5, 6, 7, 9, 10, 11], cube=cube_dict['red'])
         '''
         subweapon_option_prob_first: list = [0.042553, 0.042553, 0.042553, 0.042553, 0.042553, 0.042553, 0.042553, 0.12766]
         subweapon_option_prob_second: list = [0.004255, 0.004255, 0.050943, 0.050943, 0.050943, 0.038217, 0.004255, 0.004255, 0.050943, 0.004255, 0.004255, 0.14436]
@@ -138,27 +135,10 @@ class table:
         self.emblem_option_prob_second: list = []
         self.emblem_option_prob_third: list = []
 
-        for i in range(len(self.emblem_option_first) - 1):
-            self.emblem_option_prob_first.append(round(self.emblem_option_weight_first[i] / sum(self.emblem_option_weight_first), 6))
-        for i in range(len(self.emblem_option_second) - 1):
-            if i in [2, 3, 4]:
-                self.emblem_option_prob_second.append(round(0.9 * self.emblem_option_weight_second[self.down_weight_index] / sum(self.emblem_option_weight_second), 6))
-                self.down_weight_index += 1
-            else:
-                self.emblem_option_prob_second.append(round(0.1 * self.emblem_option_weight_first[self.first_weight_index] / sum(self.emblem_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-        for i in range(len(self.emblem_option_third) - 1):
-            if i in [2, 3, 4]:
-                self.emblem_option_prob_third.append(round(0.99 * self.emblem_option_weight_third[self.down_weight_index] / sum(self.emblem_option_weight_third), 6))
-                self.down_weight_index += 1
-            else:
-                self.emblem_option_prob_third.append(round(0.01 * self.emblem_option_weight_first[self.first_weight_index] / sum(self.emblem_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-
+        self.createTable(self.emblem_option_first, self.emblem_option_second, self.emblem_option_third,
+                         self.emblem_option_weight_first, self.emblem_option_weight_second, self.emblem_option_weight_third,
+                         self.emblem_option_prob_first, self.emblem_option_prob_second, self.emblem_option_prob_third,
+                         [2, 3, 4], [0, 1, 5, 6], cube=cube_dict['red'])
         '''
         emblem_option_prob_first: list = [0.057143, 0.057143, 0.057143, 0.057143]
         emblem_option_prob_second: list = [0.005714, 0.005714, 0.0675, 0.0675, 0.0675, 0.005714, 0.005714]
@@ -184,33 +164,10 @@ class table:
         self.weapon_black_option_prob_second: list = []
         self.weapon_black_option_prob_third: list = []
 
-        for i in range(len(self.weapon_black_option_first) - 1):
-            self.weapon_black_option_prob_first.append(round(self.weapon_black_option_weight_first[i] / sum(self.weapon_black_option_weight_first), 6))
-        for i in range(len(self.weapon_black_option_second) - 1):
-            if i in [2, 3, 4, 5, 8]:
-                self.weapon_black_option_prob_second.append(round(0.8 * self.weapon_black_option_weight_second[self.down_weight_index] / sum(self.weapon_black_option_weight_second), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10]:
-                if i == len(self.weapon_black_option_prob_second) - 1:
-                    self.weapon_black_option_prob_second[i] += round(0.2 * self.weapon_black_option_weight_first[self.first_weight_index] / sum(self.weapon_black_option_weight_first), 6)
-                else:
-                    self.weapon_black_option_prob_second.append(round(0.2 * self.weapon_black_option_weight_first[self.first_weight_index] / sum(self.weapon_black_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-        for i in range(len(self.weapon_black_option_third) - 1):
-            if i in [2, 3, 4, 5, 8]:
-                self.weapon_black_option_prob_third.append(round(0.95 * self.weapon_black_option_weight_third[self.down_weight_index] / sum(self.weapon_black_option_weight_third), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10]:
-                if i == len(self.weapon_black_option_prob_third) - 1:
-                    self.weapon_black_option_prob_third[i] += round(0.05 * self.weapon_black_option_weight_first[self.first_weight_index] / sum(self.weapon_black_option_weight_first), 6)
-                else:
-                    self.weapon_black_option_prob_third.append(round(0.05 * self.weapon_black_option_weight_first[self.first_weight_index] / sum(self.weapon_black_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-
+        self.createTable(self.weapon_black_option_first, self.weapon_black_option_second, self.weapon_black_option_third,
+                         self.weapon_black_option_weight_first, self.weapon_black_option_weight_second, self.weapon_black_option_weight_third,
+                         self.weapon_black_option_prob_first, self.weapon_black_option_prob_second, self.weapon_black_option_prob_third,
+                         [2, 3, 4, 5, 8], [0, 1, 5, 6, 7, 9, 10], cube=cube_dict['black'])
         '''
         weapon_black_option_prob_first: list = [0.04878, 0.04878, 0.04878, 0.04878, 0.04878, 0.04878, 0.04878]
         weapon_black_option_prob_second: list = [0.009576, 0.009756, 0.053333, 0.053333, 0.053333, 0.045312, 0.009756, 0.009756, 0.053333, 0.009756, 0.009756]
@@ -232,33 +189,10 @@ class table:
         self.subweapon_black_option_prob_second: list = []
         self.subweapon_black_option_prob_third: list = []
         
-        for i in range(len(self.subweapon_black_option_first) - 1):
-            self.subweapon_black_option_prob_first.append(round(self.subweapon_black_option_weight_first[i] / sum(self.subweapon_black_option_weight_first), 6))
-        for i in range(len(self.subweapon_black_option_second) - 1):
-            if i in [2, 3, 4, 5, 8, 11]:
-                self.subweapon_black_option_prob_second.append(round(0.8 * self.subweapon_black_option_weight_second[self.down_weight_index] / sum(self.subweapon_black_option_weight_second), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10, 11]:
-                if i == len(self.subweapon_black_option_prob_second) - 1:
-                    self.subweapon_black_option_prob_second[i] += round(0.2 * self.subweapon_black_option_weight_first[self.first_weight_index] / sum(self.subweapon_black_option_weight_first), 6)
-                else:
-                    self.subweapon_black_option_prob_second.append(round(0.2 * self.subweapon_black_option_weight_first[self.first_weight_index] / sum(self.subweapon_black_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-        for i in range(len(self.subweapon_black_option_third) - 1):
-            if i in [2, 3, 4, 5, 8, 11]:
-                self.subweapon_black_option_prob_third.append(round(0.95 * self.subweapon_black_option_weight_third[self.down_weight_index] / sum(self.subweapon_black_option_weight_third), 6))
-                self.down_weight_index += 1
-            if i in [0, 1, 5, 6, 7, 9, 10, 11]:
-                if i == len(self.subweapon_black_option_prob_third) - 1:
-                    self.subweapon_black_option_prob_third[i] += round(0.05 * self.subweapon_black_option_weight_first[self.first_weight_index] / sum(self.subweapon_black_option_weight_first), 6)
-                else:
-                    self.subweapon_black_option_prob_third.append(round(0.05 * self.subweapon_black_option_weight_first[self.first_weight_index] / sum(self.subweapon_black_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-
+        self.createTable(self.subweapon_black_option_first, self.subweapon_black_option_second, self.subweapon_black_option_third,
+                         self.subweapon_black_option_weight_first, self.subweapon_black_option_weight_second, self.subweapon_black_option_weight_third,
+                         self.subweapon_black_option_prob_first, self.subweapon_black_option_prob_second, self.subweapon_black_option_prob_third,
+                         [2, 3, 4, 5, 8, 11], [0, 1, 5, 6, 7, 9, 10, 11], cube=cube_dict['black'])
         '''
         subweapon_black_option_prob_first: list = [0.042553, 0.042553, 0.042553, 0.042553, 0.042553, 0.042553, 0.042553, 0.12766]
         subweapon_black_option_prob_second: list = [0.008511, 0.008511, 0.045283, 0.045283, 0.045283, 0.0387, 0.008511, 0.008511, 0.045283, 0.008511, 0.008511, 0.146286]
@@ -280,26 +214,10 @@ class table:
         self.emblem_black_option_prob_second: list = []
         self.emblem_black_option_prob_third: list = []
 
-        for i in range(len(self.emblem_black_option_first) - 1):
-            self.emblem_black_option_prob_first.append(round(self.emblem_black_option_weight_first[i] / sum(self.emblem_black_option_weight_first), 6))
-        for i in range(len(self.emblem_black_option_second) - 1):
-            if i in [2, 3, 4]:
-                self.emblem_black_option_prob_second.append(round(0.8 * self.emblem_black_option_weight_second[self.down_weight_index] / sum(self.emblem_black_option_weight_second), 6))
-                self.down_weight_index += 1
-            else:
-                self.emblem_black_option_prob_second.append(round(0.2 * self.emblem_black_option_weight_first[self.first_weight_index] / sum(self.emblem_black_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
-        for i in range(len(self.emblem_black_option_third) - 1):
-            if i in [2, 3, 4]:
-                self.emblem_black_option_prob_third.append(round(0.95 * self.emblem_black_option_weight_third[self.down_weight_index] / sum(self.emblem_black_option_weight_third), 6))
-                self.down_weight_index += 1
-            else:
-                self.emblem_black_option_prob_third.append(round(0.05 * self.emblem_black_option_weight_first[self.first_weight_index] / sum(self.emblem_black_option_weight_first), 6))
-                self.first_weight_index += 1
-        self.first_weight_index = 0
-        self.down_weight_index = 0
+        self.createTable(self.emblem_black_option_first, self.emblem_black_option_second, self.emblem_black_option_third,
+                         self.emblem_black_option_weight_first, self.emblem_black_option_weight_second, self.emblem_black_option_weight_third,
+                         self.emblem_black_option_prob_first, self.emblem_black_option_prob_second, self.emblem_black_option_prob_third,
+                         [2, 3, 4], [0, 1, 5, 6], cube=cube_dict['black'])
 
         '''
         emblem_black_option_prob_first: list = [0.057143, 0.057143, 0.057143, 0.057143]
@@ -312,11 +230,11 @@ class table:
         self.emblem_black_option_prob_third.append(1 - sum(self.emblem_black_option_prob_third))
         
         '''
-            윗잠, 레드 큐브, 이후 확률
+            윗잠, 레드 큐브, 이후 확률, 패치 이후 추가할 것
         '''
 
         '''
-            윗잠, 블랙 큐브, 이후 확률
+            윗잠, 블랙 큐브, 이후 확률, 패치 이후 추가할 것
         '''
 
         '''
