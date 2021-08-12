@@ -32,7 +32,7 @@ def counting_option(option_dict: dict, option_count, first_option: str, second_o
             print_log: 로그 출력 / 미출력
 
         output
-            None
+            SynchronizedArray(option_count) 에 카운트된다.
     '''
     # 순서대로 공격력, 마력, 보공, 방무
     option_check: list = [0 for _ in range(4)]
@@ -127,7 +127,7 @@ def counting_option_additional(option_dict: dict, option_count, first_option: st
             print_log: 로그 출력 / 미출력
 
         output
-            None
+            SynchronizedArray(option_count) 에 카운트된다.
     '''
 
     def prefix_append(option_dict: dict, target: str) -> str:
@@ -326,10 +326,15 @@ def main() -> None:
     # 아이템 타입 dict
     cube_type: dict = {1: 'Red Cube', 2: 'Black Cube', 3: 'Additional Cube'}
 
+    # 테이블 타입 dict
+    table_type: dict = {1: 'old', 2: 'new'}
+
     # 잠재능력 테이블 dict
-    # 2021.08.12 확률 가중치 변경 이후 윗잠 new weight 적용해야 함.
+    # tuple key는 (cube_input, table_input, select)
     set_potential_table: dict = {(1, 1, 1) : get_table.getWeapon(), (1, 1, 2) : get_table.getSubweapon(), (1, 1, 3) : get_table.getEmblem(),
                                  (2, 1, 1) : get_table.getBlackweapon(), (2, 1, 2) : get_table.getBlacksubweapon(), (2, 1, 3) : get_table.getBlackemblem(),
+                                 (1, 2, 1) : get_table.getNewweapon(), (1, 2, 2) : get_table.getNewsubweapon(), (1, 2, 3) : get_table.getNewemblem(),
+                                 (2, 2, 1) : get_table.getNewblackweapon(), (2, 2, 2) : get_table.getNewblacksubweapon(), (2, 2, 3) : get_table.getNewblackemblem(),
                                  (3, 1, 1) : get_table.getAdditionalweapon(), (3, 1, 2) : get_table.getAdditionalsubweapon(), (3, 1, 3) : get_table.getAdditionalemblem()}
     
     # 시뮬레이션 선택
@@ -425,7 +430,9 @@ def main() -> None:
                 try:
                     print("\nPlease Wait...\n")
                     for i in range(num_process):
-                        p = Process(target = set_simulation[potential_input], args=(sample_list, option_count, collision_count, select_option, select_option_prob, iter_start, iter_end, print_log))
+                        p = Process(target = set_simulation[potential_input], args=(sample_list, option_count, collision_count, 
+                                                                                    select_option, select_option_prob, 
+                                                                                    iter_start, iter_end, print_log))
                         p.start()
                         processes.append(p)
                         iter_start = iter_end
@@ -441,7 +448,7 @@ def main() -> None:
                     if cube_input != 3:
                         if select != 3:
                             resultmsg = concat_all(f"Result\n--------------------------------------------------------------------\n",
-                                                   f"Item Type : {item_type[select]}\nSample size : {count}\nCube Type : {cube_type[cube_input]}\n",
+                                                   f"Item Type : {item_type[select]}\nSample size : {count}\nCube Type : {cube_type[cube_input]}\n확률 테이블 : {table_type[table_input]}\n",
                                                    f"--------------------------------------------------------------------\n",
                                                    f"옵션 종류\n",
                                                    f"공공공 : {int(option_count[0])}, {round(option_count[0] * 100 / count, 3)}%   ",
@@ -474,7 +481,7 @@ def main() -> None:
                                                    f"--------------------------------------------------------------------")
                         else:
                             resultmsg = concat_all(f"Result\n--------------------------------------------------------------------\n",
-                                                   f"Item Type : {item_type[select]}\nSample size : {count}\nCube Type : {cube_type[cube_input]}\n",
+                                                   f"Item Type : {item_type[select]}\nSample size : {count}\nCube Type : {cube_type[cube_input]}\n확률 테이블 : {table_type[table_input]}\n",
                                                    f"--------------------------------------------------------------------\n",
                                                    f"옵션 종류\n",
                                                    f"공공공 : {int(option_count[0])}, {round(option_count[0] * 100 / count, 3)}%   ",

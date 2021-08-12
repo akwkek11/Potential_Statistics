@@ -246,12 +246,132 @@ class table:
         self.emblem_black_option_prob_third.append(1 - sum(self.emblem_black_option_prob_third))
         
         '''
-            윗잠, 레드 큐브, 이후 확률, 패치 이후 추가할 것
+            윗잠, 레드 큐브, 이후 확률
         '''
 
+        # 무기
+        self.weapon_option_new_first: list = ['p_power12', 'm_power12', 'boss30', 'boss35', 'boss40', 'def35', 'def40', 'etc']
+        self.weapon_option_new_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'boss30', 'boss35', 'boss40', 'def30', 'def35', 'def40', 'etc']
+        self.weapon_option_new_third: list = self.weapon_option_new_second[:]
+        self.weapon_option_new_weight_first: list = [1, 1, 1, 1, 1, 1, 1, 13.5]
+        self.weapon_option_new_weight_second: list = [1, 1, 1, 1, 10.333333]
+        self.weapon_option_new_weight_third: list = self.weapon_option_new_weight_second[:]
+        self.weapon_option_new_prob_first: list = []
+        self.weapon_option_new_prob_second: list = []
+        self.weapon_option_new_prob_third: list = []
+
+        self.createTable(self.weapon_option_new_first, self.weapon_option_new_second, self.weapon_option_new_third,
+                         self.weapon_option_new_weight_first, self.weapon_option_new_weight_second, self.weapon_option_new_weight_third,
+                         self.weapon_option_new_prob_first, self.weapon_option_new_prob_second, self.weapon_option_new_prob_third,
+                         [2, 3, 4, 7], [0, 1, 4, 5, 6, 8, 9], cube=cube_dict['red'])
+
+        self.weapon_option_new_prob_first.append(1 - sum(self.weapon_option_new_prob_first))
+        self.weapon_option_new_prob_second.append(1 - sum(self.weapon_option_new_prob_second))
+        self.weapon_option_new_prob_third.append(1 - sum(self.weapon_option_new_prob_third))
+
+        # 보조무기
+        self.subweapon_option_new_first: list = ['p_power12', 'm_power12', 'boss30', 'boss35', 'boss40', 'def35', 'def40', 'attacked', 'etc']
+        self.subweapon_option_new_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'boss30', 'boss35', 'boss40', 'def30', 'def35', 'def40', 'attacked', 'etc']
+        self.subweapon_option_new_third: list = self.subweapon_option_new_second[:]
+        self.subweapon_option_new_weight_first: list = [1, 1, 1, 1, 1, 1, 1, 3, 13.5]
+        self.subweapon_option_new_weight_second: list = [1, 1, 1, 1, 2.666666, 10.333333]
+        self.subweapon_option_new_weight_third: list = self.subweapon_option_new_weight_second[:]
+        self.subweapon_option_new_prob_first: list = []
+        self.subweapon_option_new_prob_second: list = []
+        self.subweapon_option_new_prob_third: list = []
+        
+        self.createTable(self.subweapon_option_new_first, self.subweapon_option_new_second, self.subweapon_option_new_third,
+                         self.subweapon_option_new_weight_first, self.subweapon_option_new_weight_second, self.subweapon_option_new_weight_third,
+                         self.subweapon_option_new_prob_first, self.subweapon_option_new_prob_second, self.subweapon_option_new_prob_third,
+                         [2, 3, 4, 7, 10], [0, 1, 4, 5, 6, 8, 9, 10], cube=cube_dict['red'])
+
+        self.subweapon_option_new_prob_first.append(1 - sum(self.subweapon_option_new_prob_first))
+        self.subweapon_option_new_prob_second.append(1 - sum(self.subweapon_option_new_prob_second))
+        self.subweapon_option_new_prob_third.append(1 - sum(self.subweapon_option_new_prob_third))
+        
+        # 엠블럼
+        self.emblem_option_new_first: list = ['p_power12', 'm_power12', 'def35', 'def40', 'etc']
+        self.emblem_option_new_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'def30', 'def35', 'def40', 'etc']
+        self.emblem_option_new_third: list = self.emblem_option_new_second[:]
+        self.emblem_option_new_weight_first: list = [1, 1, 1, 1, 13.5]
+        self.emblem_option_new_weight_second: list = [1, 1, 1, 10.333333]
+        self.emblem_option_new_weight_third: list = self.emblem_option_new_weight_second[:]
+        self.emblem_option_new_prob_first: list = []
+        self.emblem_option_new_prob_second: list = []
+        self.emblem_option_new_prob_third: list = []
+
+        self.createTable(self.emblem_option_new_first, self.emblem_option_new_second, self.emblem_option_new_third,
+                         self.emblem_option_new_weight_first, self.emblem_option_new_weight_second, self.emblem_option_new_weight_third,
+                         self.emblem_option_new_prob_first, self.emblem_option_new_prob_second, self.emblem_option_new_prob_third,
+                         [2, 3, 4], [0, 1, 5, 6], cube=cube_dict['red'])
+
+        self.emblem_option_new_prob_first.append(1 - sum(self.emblem_option_new_prob_first))
+        self.emblem_option_new_prob_second.append(1 - sum(self.emblem_option_new_prob_second))
+        self.emblem_option_new_prob_third.append(1 - sum(self.emblem_option_new_prob_third))
+
         '''
-            윗잠, 블랙 큐브, 이후 확률, 패치 이후 추가할 것
+            윗잠, 블랙 큐브, 이후 확률
         '''
+
+        # 무기
+        self.weapon_black_option_new_first: list = ['p_power12', 'm_power12', 'boss30', 'boss35', 'boss40', 'def35', 'def40', 'etc']
+        self.weapon_black_option_new_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'boss30', 'boss35', 'boss40', 'def30', 'def35', 'def40', 'etc']
+        self.weapon_black_option_new_third: list = self.weapon_black_option_new_second[:]
+        self.weapon_black_option_new_weight_first: list = [1, 1, 1, 1, 1, 1, 1, 13.5]
+        self.weapon_black_option_new_weight_second: list = [1, 1, 1, 1, 10.333333]
+        self.weapon_black_option_new_weight_third: list = self.weapon_black_option_new_weight_second[:]
+        self.weapon_black_option_new_prob_first: list = []
+        self.weapon_black_option_new_prob_second: list = []
+        self.weapon_black_option_new_prob_third: list = []
+
+        self.createTable(self.weapon_black_option_new_first, self.weapon_black_option_new_second, self.weapon_black_option_new_third,
+                         self.weapon_black_option_new_weight_first, self.weapon_black_option_new_weight_second, self.weapon_black_option_new_weight_third,
+                         self.weapon_black_option_new_prob_first, self.weapon_black_option_new_prob_second, self.weapon_black_option_new_prob_third,
+                         [2, 3, 4, 7], [0, 1, 4, 5, 6, 8, 9], cube=cube_dict['black'])
+
+        self.weapon_black_option_new_prob_first.append(1 - sum(self.weapon_black_option_new_prob_first))
+        self.weapon_black_option_new_prob_second.append(1 - sum(self.weapon_black_option_new_prob_second))
+        self.weapon_black_option_new_prob_third.append(1 - sum(self.weapon_black_option_new_prob_third))
+
+        # 보조무기
+        self.subweapon_black_option_new_first: list = ['p_power12', 'm_power12', 'boss30', 'boss35', 'boss40', 'def35', 'def40', 'attacked', 'etc']
+        self.subweapon_black_option_new_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'boss30', 'boss35', 'boss40', 'def30', 'def35', 'def40', 'attacked', 'etc']
+        self.subweapon_black_option_new_third: list = self.subweapon_black_option_new_second[:]
+        self.subweapon_black_option_new_weight_first: list = [1, 1, 1, 1, 1, 1, 1, 3, 13.5]
+        self.subweapon_black_option_new_weight_second: list = [1, 1, 1, 1, 2.666666, 10.333333]
+        self.subweapon_black_option_new_weight_third: list = self.subweapon_black_option_new_weight_second[:]
+        self.subweapon_black_option_new_prob_first: list = []
+        self.subweapon_black_option_new_prob_second: list = []
+        self.subweapon_black_option_new_prob_third: list = []
+        
+        self.createTable(self.subweapon_black_option_new_first, self.subweapon_black_option_new_second, self.subweapon_black_option_new_third,
+                         self.subweapon_black_option_new_weight_first, self.subweapon_black_option_new_weight_second, self.subweapon_black_option_new_weight_third,
+                         self.subweapon_black_option_new_prob_first, self.subweapon_black_option_new_prob_second, self.subweapon_black_option_new_prob_third,
+                         [2, 3, 4, 7, 10], [0, 1, 4, 5, 6, 8, 9, 10], cube=cube_dict['black'])
+
+        self.subweapon_black_option_new_prob_first.append(1 - sum(self.subweapon_black_option_new_prob_first))
+        self.subweapon_black_option_new_prob_second.append(1 - sum(self.subweapon_black_option_new_prob_second))
+        self.subweapon_black_option_new_prob_third.append(1 - sum(self.subweapon_black_option_new_prob_third))
+        
+        # 엠블럼
+        self.emblem_black_option_new_first: list = ['p_power12', 'm_power12', 'def35', 'def40', 'etc']
+        self.emblem_black_option_new_second: list = ['p_power12', 'm_power12', 'p_power9', 'm_power9', 'def30', 'def35', 'def40', 'etc']
+        self.emblem_black_option_new_third: list = self.emblem_black_option_new_second[:]
+        self.emblem_black_option_new_weight_first: list = [1, 1, 1, 1, 13.5]
+        self.emblem_black_option_new_weight_second: list = [1, 1, 1, 10.333333]
+        self.emblem_black_option_new_weight_third: list = self.emblem_black_option_new_weight_second[:]
+        self.emblem_black_option_new_prob_first: list = []
+        self.emblem_black_option_new_prob_second: list = []
+        self.emblem_black_option_new_prob_third: list = []
+
+        self.createTable(self.emblem_black_option_new_first, self.emblem_black_option_new_second, self.emblem_black_option_new_third,
+                         self.emblem_black_option_new_weight_first, self.emblem_black_option_new_weight_second, self.emblem_black_option_new_weight_third,
+                         self.emblem_black_option_new_prob_first, self.emblem_black_option_new_prob_second, self.emblem_black_option_new_prob_third,
+                         [2, 3, 4], [0, 1, 5, 6], cube=cube_dict['black'])
+
+        self.emblem_black_option_new_prob_first.append(1 - sum(self.emblem_black_option_new_prob_first))
+        self.emblem_black_option_new_prob_second.append(1 - sum(self.emblem_black_option_new_prob_second))
+        self.emblem_black_option_new_prob_third.append(1 - sum(self.emblem_black_option_new_prob_third))
 
         '''
             에디셔널
@@ -391,9 +511,50 @@ class table:
         return [self.emblem_black_option_first, self.emblem_black_option_second, self.emblem_black_option_third,
                 self.emblem_black_option_prob_first, self.emblem_black_option_prob_second, self.emblem_black_option_prob_third]
 
+    
     # 레드 큐브(이후)
+    def getNewweapon(self) -> List[list]:
+        '''
+            무기 - 레드 큐브(이후)
+        '''
+        return [self.weapon_option_new_first, self.weapon_option_new_second, self.weapon_option_new_third, 
+                self.weapon_option_new_prob_first, self.weapon_option_new_prob_second, self.weapon_option_new_prob_third]
+    
+    def getNewsubweapon(self) -> List[list]:
+        '''
+            보조무기 - 레드 큐브(이후)
+        '''
+        return [self.subweapon_option_new_first, self.subweapon_option_new_second, self.subweapon_option_new_third, 
+                self.subweapon_option_new_prob_first, self.subweapon_option_new_prob_second, self.subweapon_option_new_prob_third]
 
-    # 븡랙 큐브(이후)
+    def getNewemblem(self) -> List[list]:
+        '''
+            엠블럼 - 레드 큐브(이후)
+        '''
+        return [self.emblem_option_new_first, self.emblem_option_new_second, self.emblem_option_new_third,
+                self.emblem_option_new_prob_first, self.emblem_option_new_prob_second, self.emblem_option_new_prob_third]
+
+    # 블랙 큐브(이후)
+    def getNewblackweapon(self) -> List[list]:
+        '''
+            무기 - 블랙 큐브(이후)
+        '''
+        return [self.weapon_black_option_new_first, self.weapon_black_option_new_second, self.weapon_black_option_new_third, 
+                self.weapon_black_option_new_prob_first, self.weapon_black_option_new_prob_second, self.weapon_black_option_new_prob_third]
+    
+    def getNewblacksubweapon(self) -> List[list]:
+        '''
+            보조무기 - 블랙 큐브(이후)
+        '''
+        return [self.subweapon_black_option_new_first, self.subweapon_black_option_new_second, self.subweapon_black_option_new_third, 
+                self.subweapon_black_option_new_prob_first, self.subweapon_black_option_new_prob_second, self.subweapon_black_option_new_prob_third]
+
+    def getNewblackemblem(self) -> List[list]:
+        '''
+            엠블럼 - 블랙 큐브(이후)
+        '''
+        return [self.emblem_black_option_new_first, self.emblem_black_option_new_second, self.emblem_black_option_new_third,
+                self.emblem_black_option_new_prob_first, self.emblem_black_option_new_prob_second, self.emblem_black_option_new_prob_third]
 
     # 에디셔널 큐브
     def getAdditionalweapon(self) -> List[list]:
