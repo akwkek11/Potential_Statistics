@@ -58,9 +58,9 @@ def counting_option(option_dict: dict, option_count, first_option: str, second_o
                                     ('boss30', 'boss30', 'def30')]
 
     # 뾰공이 섞였어도 이탈이라 아닌 리스트
-    not_shit_boss_list_20: list = [('boss40', 'p_power12', 'boss20'), ('boss35', 'p_power12', 'boss20'),
-                                   ('def40', 'boss40', 'boss20'), ('p_power12', 'p_power12', 'boss20'),
-                                   ('boss40', 'def40', 'boss20'), ('boss40', 'def35', 'boss20')]
+    not_shit_boss_list_20: list = [('boss40', 'p_power12', 'boss20'), ('boss35', 'p_power12', 'boss20'), ('p_power12', 'p_power12', 'boss20'),
+                                   ('boss40', 'm_power12', 'boss20'), ('boss35', 'm_power12', 'boss20'), ('m_power12', 'm_power12', 'boss20'),
+                                   ('def40', 'boss40', 'boss20'), ('boss40', 'def40', 'boss20'), ('boss40', 'def35', 'boss20')]
 
     # 뾰공이 있는가? 없는가?
     shit_boss_option = False
